@@ -1,6 +1,6 @@
-const API = "https://YOUR-BACKEND.onrender.com";
+const API = "https://ppob-backend-production.up.railway.app";
 
-// FIREBASE CONFIG (ISI DARI FIREBASE)
+// FIREBASE CONFIG (ISI PUNYA KAMU)
 const firebaseConfig = {
   apiKey: "ISI",
   authDomain: "ISI",
@@ -32,14 +32,13 @@ function register(){
 auth.onAuthStateChanged(user=>{
   if(user){
     currentUser = user;
-    document.getElementById("auth").style.display="none";
-    document.getElementById("app").style.display="block";
-
+    authDiv.style.display="none";
+    app.style.display="block";
     loadSaldo(user.uid);
   }
 });
 
-// SALDO REALTIME
+// SALDO
 function loadSaldo(uid){
   db.collection("users").doc(uid)
   .onSnapshot(doc=>{
@@ -47,9 +46,9 @@ function loadSaldo(uid){
   });
 }
 
-// DEPOSIT QRIS
+// DEPOSIT
 async function deposit(){
-  let nominal = prompt("Masukkan nominal");
+  let nominal = prompt("Isi saldo:");
 
   let res = await fetch(API+"/deposit",{
     method:"POST",
@@ -64,7 +63,7 @@ async function deposit(){
   window.open(data.data.qr_url);
 }
 
-// BELI PRODUK
+// BELI
 async function beli(sku, harga){
   let target = document.getElementById("target").value;
 
@@ -76,12 +75,10 @@ async function beli(sku, harga){
     return;
   }
 
-  // potong saldo
   await db.collection("users").doc(currentUser.uid).update({
     saldo: saldoUser - harga
   });
 
-  // kirim order
   let res = await fetch(API+"/order",{
     method:"POST",
     headers:{ "Content-Type":"application/json"},
