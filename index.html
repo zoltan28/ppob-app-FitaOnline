@@ -2,10 +2,8 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PPOB Sahrul</title>
-<link rel="stylesheet" href="style.css">
+<title>PPOB App</title>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
@@ -22,22 +20,20 @@
   <button onclick="register()">Daftar</button>
 </div>
 
-<!-- DASHBOARD -->
+<!-- APP -->
 <div id="app" style="display:none">
 
-<div class="header">
-  Saldo: Rp <span id="saldo">0</span>
-</div>
+<h2>Saldo: Rp <span id="saldo">0</span></h2>
 
 <button onclick="deposit()">Isi Saldo</button>
 
-<div class="menu">
-  <div onclick="beli('TELKOMSEL10',10000)">📱 Pulsa</div>
-  <div onclick="beli('XL10',10000)">📶 Data</div>
-  <div onclick="beli('PLN20',20000)">💡 PLN</div>
-</div>
+<br><br>
 
 <input id="target" placeholder="Nomor">
+
+<br><br>
+
+<button onclick="beli('TELKOMSEL10',10000)">Pulsa 10K</button>
 
 </div>
 
