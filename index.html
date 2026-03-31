@@ -4,22 +4,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PPOB Sahrul</title>
 <link rel="stylesheet" href="style.css">
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+
 </head>
 
 <body>
+
+<!-- LOGIN -->
+<div id="auth">
+  <input id="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+  <button onclick="register()">Daftar</button>
+</div>
+
+<!-- DASHBOARD -->
+<div id="app" style="display:none">
 
 <div class="header">
   Saldo: Rp <span id="saldo">0</span>
 </div>
 
+<button onclick="deposit()">Isi Saldo</button>
+
 <div class="menu">
-  <div onclick="order('ML5')">🎮<p>ML 5K</p></div>
-  <div onclick="order('PLN20')">💡<p>PLN 20K</p></div>
-  <div onclick="order('XL10')">📶<p>Data 10K</p></div>
-  <div onclick="order('TELKOMSEL10')">📱<p>Pulsa 10K</p></div>
+  <div onclick="beli('TELKOMSEL10',10000)">📱 Pulsa</div>
+  <div onclick="beli('XL10',10000)">📶 Data</div>
+  <div onclick="beli('PLN20',20000)">💡 PLN</div>
 </div>
 
-<input id="target" placeholder="Nomor / ID">
+<input id="target" placeholder="Nomor">
+
+</div>
 
 <script src="app.js"></script>
 </body>
