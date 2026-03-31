@@ -2,9 +2,9 @@ const API = "https://ppob-backend-production.up.railway.app";
 
 // FIREBASE CONFIG (ISI PUNYA KAMU)
 const firebaseConfig = {
-  apiKey: "ISI",
-  authDomain: "ISI",
-  projectId: "ISI"
+  apiKey: "AIzaSyAaEWDrk8yYGaOmZISFuK9Vr9kvdsiN_ho",
+  authDomain: "ppob-app-5c3f2.firebaseapp.com",
+  projectId: "ppob-app-5c3f2"
 };
 
 firebase.initializeApp(firebaseConfig);
