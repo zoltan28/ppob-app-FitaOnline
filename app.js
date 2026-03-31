@@ -8,15 +8,18 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-let currentUser;
+// ELEMENT
+let email = document.getElementById("email");
+let password = document.getElementById("password");
+let saldo = document.getElementById("saldo");
+let authDiv = document.getElementById("auth");
+let app = document.getElementById("app");
 
-// LOGIN
-function login(){
-  auth.signInWithEmailAndPassword(email.value, password.value);
-}
+let currentUser;
 
 // REGISTER
 function register(){
@@ -25,7 +28,15 @@ function register(){
     db.collection("users").doc(user.user.uid).set({
       saldo: 0
     });
-  });
+    alert("Register berhasil");
+  }).catch(e=>alert(e.message));
+}
+
+// LOGIN
+function login(){
+  auth.signInWithEmailAndPassword(email.value, password.value)
+  .then(()=>alert("Login berhasil"))
+  .catch(e=>alert(e.message));
 }
 
 // AUTO LOGIN
@@ -34,61 +45,55 @@ auth.onAuthStateChanged(user=>{
     currentUser = user;
     authDiv.style.display="none";
     app.style.display="block";
-    loadSaldo(user.uid);
+
+    db.collection("users").doc(user.uid)
+    .onSnapshot(doc=>{
+      saldo.innerText = doc.data().saldo;
+    });
   }
 });
 
-// SALDO
-function loadSaldo(uid){
-  db.collection("users").doc(uid)
-  .onSnapshot(doc=>{
-    saldo.innerText = doc.data().saldo;
-  });
-}
-
-// DEPOSIT
+// DEPOSIT (TEST DULU)
 async function deposit(){
-  let nominal = prompt("Isi saldo:");
+  let nominal = prompt("Masukkan saldo:");
 
-  let res = await fetch(API+"/deposit",{
-    method:"POST",
-    headers:{ "Content-Type":"application/json"},
-    body: JSON.stringify({
-      amount: nominal,
-      uid: currentUser.uid
-    })
+  if(!nominal) return;
+
+  alert("Simulasi: saldo bertambah");
+
+  // TAMBAH SALDO LANGSUNG (TEST)
+  let userRef = db.collection("users").doc(currentUser.uid);
+  let userDoc = await userRef.get();
+
+  await userRef.update({
+    saldo: userDoc.data().saldo + parseInt(nominal)
   });
-
-  let data = await res.json();
-  window.open(data.data.qr_url);
 }
 
 // BELI
-async function beli(sku, harga){
+async function beli(){
   let target = document.getElementById("target").value;
 
-  let userDoc = await db.collection("users").doc(currentUser.uid).get();
+  if(!target){
+    alert("Masukkan nomor!");
+    return;
+  }
+
+  let userRef = db.collection("users").doc(currentUser.uid);
+  let userDoc = await userRef.get();
+
   let saldoUser = userDoc.data().saldo;
 
-  if(saldoUser < harga){
+  if(saldoUser < 10000){
     alert("Saldo tidak cukup");
     return;
   }
 
-  await db.collection("users").doc(currentUser.uid).update({
-    saldo: saldoUser - harga
+  // POTONG SALDO
+  await userRef.update({
+    saldo: saldoUser - 10000
   });
 
-  let res = await fetch(API+"/order",{
-    method:"POST",
-    headers:{ "Content-Type":"application/json"},
-    body: JSON.stringify({
-      buyer_sku_code: sku,
-      customer_no: target,
-      ref_id: "INV"+Date.now()
-    })
-  });
-
-  let data = await res.json();
-  alert(data.data.message);
+  // SIMULASI ORDER
+  alert("Order berhasil (simulasi)");
 }
